@@ -1,16 +1,34 @@
-# add-pr-comment-proxy
+# Danger-Comment-Proxy
 
-A simple proxy for PR comments. Works well with [add-pr-comment](https://github.com/mshick/add-pr-comment/). Workaround for GitHub making all token permissions read-only when a fork is submitted for a PR. See [this discussion](https://github.community/t/github-actions-are-severely-limited-on-prs/18179/4) for more detail.
+Fork of https://github.com/mshick/add-pr-comment-proxy adjusted for Danger-PHP
+
+A simple proxy for PR comments. Workaround for GitHub making all token permissions read-only when a fork is submitted for a PR. 
+See [this discussion](https://github.community/t/github-actions-are-severely-limited-on-prs/18179/4) for more detail.
 
 ## Deploy
 
 **Requirements**
 
 - A [personal access token](https://github.com/settings/tokens) with the `repo:public_repos` scope if you're using this to support a public repo. Your use-case might require other scopes.
+- This token needs to be set as environment variable with name `GITHUB_TOKEN`
 
 **Run on Cloud Run**
 
 [![Run on Google Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run)
+
+**Run on AWS Lambda**
+
+```shell
+npm install
+zip -r lambda.zip .
+
+// Create node:14 lambda in AWS console, Set environment variable
+// Update code
+aws lambda update-function-code --function-name github-comment-proxy --zip-file fileb://lambda.zip
+
+// Create HTTP API Gateway
+// Create a ANY Route with /{proxy+} and route it to the new created lambda
+```
 
 ## How it works
 
